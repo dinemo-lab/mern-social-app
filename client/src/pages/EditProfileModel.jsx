@@ -126,8 +126,9 @@ const EditProfileModal = ({ isOpen, onClose }) => {
   
     try {
       // Use fetch instead of axios
+     // https://api.cloudinary.com/v1_1//image/upload
       const response = await fetch(
-        "https://api.cloudinary.com/v1_1/dxmicz5c3/image/upload",
+        `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
         {
           method: 'POST',
           body: uploadData

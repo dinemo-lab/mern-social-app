@@ -111,7 +111,7 @@ function setupSocketIO(server) {
 
     // Handle disconnect
     socket.on("disconnect", () => {
-      console.log("User disconnected:", socket.id);
+      
       
       // Remove user from active users list
       for (const [userId, socketId] of userSockets.entries()) {

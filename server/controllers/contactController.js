@@ -20,7 +20,7 @@ export const handleContactForm = async (req, res) => {
     // Email options
     const mailOptions = {
       from: email, // Sender's email
-      to: "dineshmourya02@gmail.com", // Replace with your email to receive messages
+      to: process.env.EMAIL_USER, // Replace with your email to receive messages
       subject: `Contact Form Submission: ${subject}`,
       text: `You have received a new message from ${name} (${email}):\n\n${message}`,
     };

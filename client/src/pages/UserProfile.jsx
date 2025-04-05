@@ -10,7 +10,7 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/users/${id}`); // Replace with your API endpoint
+        const response = await axios.get(`${import.meta.env.VITE_LOCAL_URL}/api/users/${id}`); // Replace with your API endpoint
         setUser(response.data);
       } catch (error) {
         console.error("Failed to fetch user:", error);

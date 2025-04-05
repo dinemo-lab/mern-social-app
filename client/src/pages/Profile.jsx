@@ -14,7 +14,7 @@ const Profile = () => {
     const fetchUserProfile = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get('http://localhost:5000/api/users/profile')
+        const { data } = await axios.get(`${import.meta.env.VITE_LOCAL_URL}/api/users/profile`)
         setUserProfile(data);
         setLoading(false);
       } catch (err) {

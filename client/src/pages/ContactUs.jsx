@@ -31,7 +31,7 @@ const ContactUs = () => {
     setSubmitting(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/contact", formData);
+      const response = await axios.post(`${import.meta.env.VITE_LOCAL_URL}/api/contact`, formData);
 
       if (response.status === 200) {
         setSubmitted(true);

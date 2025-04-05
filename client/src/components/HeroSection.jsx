@@ -99,7 +99,8 @@ const HeroSection = () => {
             transition={{ duration: 0.5, delay: 1.1 }}
           >
             <motion.button
-            //   onClick={handleCreateVisit}
+            //onclick={handleCreateVisit}
+              onClick={() => window.location.href = "/create-visit"}
               className="group bg-white text-indigo-700 px-8 py-4 rounded-lg font-semibold hover:bg-indigo-50 transition shadow-lg flex items-center justify-center gap-2"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
@@ -123,7 +124,7 @@ const HeroSection = () => {
               whileTap={{ scale: 0.98 }}
             >
               <Link
-                to="/browse-visits"
+                to="/browse"
                 className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition flex items-center justify-center gap-2 backdrop-blur-sm"
               >
                 <span>Browse Visits</span>

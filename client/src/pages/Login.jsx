@@ -30,7 +30,7 @@ const Login = () => {
     const googleToken = credentialResponse.credential;
 
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/google-login", {
+      const response = await axios.post(`${import.meta.env.VITE_LOCAL_URL}/api/auth/google-login`, {
         token: googleToken,
       });
 
