@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchMyVisits ,updateVisitStatus} from "../store/VisitSlice";
 import { Link } from "react-router-dom";
 
+import { useNavigate } from "react-router-dom";
 import { MapPin, Calendar, Users, Clock, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 
 const MyVisits = () => {
+  const Navigate = useNavigate();
   const dispatch = useDispatch();
   const { myVisits = [], loading, error } = useSelector((state) => ({
     myVisits: state.visits.myVisits,
@@ -22,11 +24,10 @@ const MyVisits = () => {
 
   const handleStatusChange = (visitId, newStatus) => {
     dispatch(updateVisitStatus({ visitId, status: newStatus }));
+    Navigate(`/visit/${visitId}`); // Redirect to visit details page after status change
   };
 
-  // Debug logs
-  console.log("Redux state:", useSelector(state => state.visits));
-  console.log("myVisits from state:", myVisits);
+   
 
   // Filter visits based on active tab
   const filteredVisits = myVisits.filter((visit) => {

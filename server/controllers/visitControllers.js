@@ -23,7 +23,7 @@ export const createVisitRequest = async (req, res) => {
       });
   
       await visitRequest.save();
-      console.log("Visit request created:", visitRequest);
+      
        
  
       res.status(201).json(visitRequest);

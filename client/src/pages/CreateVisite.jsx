@@ -161,7 +161,7 @@ const CreateVisit = () => {
       const formattedDate = date ? date.toISOString().split("T")[0] : "";
 
       const { data } = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/visit`,
+        `${import.meta.env.VITE_LOCAL_URL}/api/visit`,
         {
           location,
           coordinates,
