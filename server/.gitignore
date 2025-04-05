@@ -1,0 +1,68 @@
+# Node.js dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Build output
+/build/
+/dist/
+
+# Cache files
+.cache/
+*.cache
+*.tmp
+
+# Database files
+*.sqlite
+*.sqlite3
+*.db
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files
+.vscode/
+.idea/
+*.iml
+
+# Coverage reports
+coverage/
+
+# Debugging files
+*.pid
+*.seed
+*.pid.lock
+
+# Miscellaneous
+*.swp
+*.swo
+*.bak
+*.orig
+
+# React-specific
+/.next/
+/out/
+/public/static/
+*.map
+
+# Logs and debugging
+debug.log
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Git-specific
+.git/
