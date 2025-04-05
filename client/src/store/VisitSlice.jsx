@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Base API URL
-const API_URL = import.meta.env.VITE_LOCAL_URL || "http://localhost:5000/api";
+const API_URL = `${import.meta.env.VITE_LOCAL_URL}/api` ;
 
 // Async thunk to fetch visit requests
 export const fetchVisits = createAsyncThunk(
