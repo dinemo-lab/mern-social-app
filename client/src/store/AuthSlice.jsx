@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/auth"; // Update with your backend URL
+const API_URL = `${import.meta.env.VITE_LOCAL_URL}/api/auth`; // Update with your backend URL
 
 // Retrieve user from localStorage
 const getUserFromStorage = () => {
