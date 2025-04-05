@@ -2,8 +2,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRightIcon ,CalendarIcon,MapPinIcon} from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
+
+  const Navigate = useNavigate();
+
+
   return (
     <motion.section 
       className="relative h-screen bg-gradient-to-r from-indigo-900 via-purple-800 to-violet-900 text-white overflow-hidden flex items-center"
@@ -99,8 +104,8 @@ const HeroSection = () => {
             transition={{ duration: 0.5, delay: 1.1 }}
           >
             <motion.button
-            //onclick={handleCreateVisit}
-              onClick={() => window.location.href = "/create-visit"}
+              type="button"
+              onClick={() => Navigate("/create-visit")}
               className="group bg-white text-indigo-700 px-8 py-4 rounded-lg font-semibold hover:bg-indigo-50 transition shadow-lg flex items-center justify-center gap-2"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
@@ -124,7 +129,7 @@ const HeroSection = () => {
               whileTap={{ scale: 0.98 }}
             >
               <Link
-                to="/browse"
+                to="/explore"
                 className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition flex items-center justify-center gap-2 backdrop-blur-sm"
               >
                 <span>Browse Visits</span>
