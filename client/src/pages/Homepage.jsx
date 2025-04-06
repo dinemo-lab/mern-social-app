@@ -20,10 +20,10 @@ const Home = () => {
   const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [popularCategories] = useState([
-    { name: "History & Architecture", icon: "🏛️", count: 45 },
-    { name: "Food & Markets", icon: "🍽️", count: 38 },
-    { name: "Nature & Parks", icon: "🌿", count: 32 },
-    { name: "Arts & Culture", icon: "🎭", count: 29 }
+    { name: "History & Architecture", icon: "🏛️"},
+    { name: "Food & Markets", icon: "🍽️", },
+    { name: "Nature & Parks", icon: "🌿", },
+    { name: "Arts & Culture", icon: "🎭", }
   ]);
 
   // Refs for GSAP animations
@@ -375,7 +375,7 @@ const Home = () => {
                     }}
                   >{category.icon}</motion.span>
                   <h3 className="text-lg font-medium text-purple-800 mb-1">{category.name}</h3>
-                  <p className="text-sm text-gray-500">{category.count} visits</p>
+                  
                 </Link>
               </motion.div>
             ))}
