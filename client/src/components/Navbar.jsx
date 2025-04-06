@@ -97,6 +97,9 @@ const Navbar = () => {
         <Link to="/about" className="hover:text-purple-200 transition duration-150 font-medium">
           About Us
         </Link>
+        <Link to="/contact" className="hover:text-purple-200 transition duration-150 font-medium">
+          Contact Us
+        </Link>
       </div>
 
       {/* User Authentication (Desktop) */}
@@ -213,7 +216,20 @@ const Navbar = () => {
             >
               Explore
             </Link>
-
+            <Link
+              to="/contact"
+              className="hover:bg-purple-500 py-2 px-3 rounded transition duration-150"
+              onClick={() => setIsOpen(false)}
+            >
+              About Us
+            </Link>
+            <Link
+              to="/contact"
+              className="hover:bg-purple-500 py-2 px-3 rounded transition duration-150"
+              onClick={() => setIsOpen(false)}
+            >
+              Contact Us
+            </Link>
             <div className="border-t border-purple-400 my-2 pt-2">
               {user ? (
                 <>

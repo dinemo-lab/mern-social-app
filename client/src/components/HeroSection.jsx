@@ -75,9 +75,9 @@ const HeroSection = () => {
             transition={{ duration: 0.5, delay: 0.5 }}
             className="mb-6"
           >
-            <span className="px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-sm font-medium inline-block mb-6">
-              Local Exploration Redefined
-            </span>
+         <span className="px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-sm font-medium inline-block mb-6 border border-white/40 shadow-lg shadow-white/20">
+  Local Exploration Redefined
+</span>
           </motion.div>
           <motion.h1 
             className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"

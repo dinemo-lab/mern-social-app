@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser, clearErrors } from "../store/AuthSlice";
 import { useNavigate } from "react-router-dom";
-import { AlertCircle, Loader, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -14,9 +14,7 @@ const Register = () => {
     confirmPassword: "",
     coordinates: [0, 0], // Default coordinates
   });
-  const [formErrors, setFormErrors] = useState({});
   const [passwordStrength, setPasswordStrength] = useState("");
-  const [submitted, setSubmitted] = useState(false);
   const [useLocation, setUseLocation] = useState(false);
   const [locationStatus, setLocationStatus] = useState("");
 
@@ -87,31 +85,6 @@ const Register = () => {
     }
   };
 
-  const validateForm = () => {
-    const errors = {};
-    if (!formData.name.trim()) errors.name = "Name is required";
-
-    if (!formData.email) {
-      errors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = "Email is invalid";
-    }
-
-    if (!formData.password) {
-      errors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      errors.password = "Password must be at least 8 characters";
-    } else if (passwordStrength === "Weak") {
-      errors.password = "Password is too weak. Please use a stronger password.";
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = "Passwords do not match";
-    }
-
-    return errors;
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -119,11 +92,6 @@ const Register = () => {
     // Update password strength
     if (name === "password") {
       setPasswordStrength(calculatePasswordStrength(value));
-    }
-
-    // Only validate if form has been submitted once
-    if (submitted) {
-      setFormErrors(validateForm());
     }
   };
 
@@ -143,136 +111,157 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    const validationErrors = validateForm();
-    setFormErrors(validationErrors);
-    setSubmitted(true);
+    // Validate form
+    if (!formData.name.trim()) {
+      toast.error("Name is required");
+      return;
+    }
 
-    if (Object.keys(validationErrors).length === 0) {
-      try {
-        const userData = {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        };
+    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
+      toast.error("Valid email is required");
+      return;
+    }
 
-        // Only include coordinates if location is being used
-        if (useLocation && formData.coordinates[0] !== 0 && formData.coordinates[1] !== 0) {
-          userData.coordinates = formData.coordinates;
-        }
+    if (!formData.password || formData.password.length < 8 || passwordStrength === "Weak") {
+      toast.error("Password must be at least 8 characters and strong enough");
+      return;
+    }
 
-        await dispatch(registerUser(userData));
-        toast.success("Registration successful!");
-      } catch (err) {
-        console.error("Registration failed:", err);
-        toast.error("Registration failed. Please try again.");
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    try {
+      const userData = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      };
+
+      // Only include coordinates if location is being used
+      if (useLocation && formData.coordinates[0] !== 0 && formData.coordinates[1] !== 0) {
+        userData.coordinates = formData.coordinates;
       }
-    } else {
-      toast.error("Please fix the errors in the form.");
+
+      dispatch(registerUser(userData)).then((action) => {
+        if (action.type === "auth/register/fulfilled") {
+          toast.success("Registration successful! Redirecting...");
+          navigate("/");
+        } else {
+          toast.error("Registration failed. Please try again.");
+        }
+      });
+    } catch (err) {
+      console.error("Registration failed:", err);
+      toast.error("Registration failed. Please try again.");
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50 p-4">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="bg-blue-500 p-4 text-white">
-          <h2 className="text-xl font-bold">Register Account</h2>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+        <div className="text-center">
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">Create account</h2>
+          <p className="mt-2 text-sm text-gray-600">Sign up for a new account</p>
         </div>
 
-        <form onSubmit={handleRegister} className="p-5">
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 text-red-600 rounded border border-red-200 text-sm">
-              <AlertCircle size={16} className="inline mr-2" />
-              {error}
+        {error && (
+          <div className="p-4 text-sm text-red-700 bg-red-100 rounded-md">
+            {error}
+          </div>
+        )}
+
+        <form className="mt-8 space-y-6" onSubmit={handleRegister}>
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                Full Name
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                autoComplete="name"
+                required
+                value={formData.name}
+                onChange={handleChange}
+                className="block w-full px-3 py-2 mt-1 border text-gray-900 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
             </div>
-          )}
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-medium mb-1">Full Name</label>
-            <input
-              type="text"
-              name="name"
-              placeholder="Enter your name"
-              value={formData.name}
-              onChange={handleChange}
-              className={`w-full px-3 py-2 border text-gray-700 ${
-                formErrors.name ? "border-red-500" : "border-gray-300"
-              } rounded`}
-            />
-            {formErrors.name && <p className="text-red-500 text-xs mt-1">{formErrors.name}</p>}
-          </div>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                className="block w-full px-3 py-2 mt-1 border text-gray-900 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-medium mb-1">Email</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="you@example.com"
-              value={formData.email}
-              onChange={handleChange}
-              className={`w-full px-3 py-2 border text-gray-700 ${
-                formErrors.email ? "border-red-500" : "border-gray-300"
-              } rounded`}
-            />
-            {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
-          </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="new-password"
+                required
+                value={formData.password}
+                onChange={handleChange}
+                className="block w-full px-3 py-2 mt-1 border text-gray-900 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+              {formData.password && (
+                <p
+                  className={`text-xs mt-1 ${
+                    passwordStrength === "Weak"
+                      ? "text-red-500"
+                      : passwordStrength === "Moderate"
+                      ? "text-yellow-500"
+                      : "text-green-500"
+                  }`}
+                >
+                  Password Strength: {passwordStrength}
+                </p>
+              )}
+            </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-medium mb-1">Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Create a password"
-              value={formData.password}
-              onChange={handleChange}
-              className={`w-full px-3 py-2 border text-gray-700 ${
-                formErrors.password ? "border-red-500" : "border-gray-300"
-              } rounded`}
-            />
-            {formErrors.password && <p className="text-red-500 text-xs mt-1">{formErrors.password}</p>}
-            {formData.password && (
-              <p
-                className={`text-xs mt-1 ${
-                  passwordStrength === "Weak"
-                    ? "text-red-500"
-                    : passwordStrength === "Moderate"
-                    ? "text-yellow-500"
-                    : "text-green-500"
-                }`}
-              >
-                Password Strength: {passwordStrength}
-              </p>
-            )}
-          </div>
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                Confirm Password
+              </label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                autoComplete="new-password"
+                required
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className="block w-full px-3 py-2 mt-1 border text-gray-900 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-medium mb-1">Confirm Password</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm your password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className={`w-full px-3 py-2 border text-gray-700 ${
-                formErrors.confirmPassword ? "border-red-500" : "border-gray-300"
-              } rounded`}
-            />
-            {formErrors.confirmPassword && (
-              <p className="text-red-500 text-xs mt-1">{formErrors.confirmPassword}</p>
-            )}
-          </div>
-
-          <div className="mb-4">
             <div className="flex items-center">
               <input
                 type="checkbox"
                 id="useLocation"
                 checked={useLocation}
                 onChange={toggleLocation}
-                className="mr-2"
+                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
               />
               <label
                 htmlFor="useLocation"
-                className="text-sm text-gray-700 cursor-pointer flex items-center"
+                className="ml-2 block text-sm text-gray-700 cursor-pointer flex items-center"
               >
                 <MapPin size={16} className="mr-1" />
                 Share my location
@@ -290,26 +279,20 @@ const Register = () => {
             )}
           </div>
 
-          <button
-            type="submit"
-            className={`w-full py-2 px-4 rounded text-white font-medium ${
-              loading ? "bg-blue-400" : "bg-blue-500 hover:bg-blue-600"
-            }`}
-            disabled={loading}
-          >
-            {loading ? (
-              <>
-                <Loader size={16} className="animate-spin inline mr-2" /> Registering...
-              </>
-            ) : (
-              "Register"
-            )}
-          </button>
+          <div>
+            <button
+              type="submit"
+              className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={loading}
+            >
+              {loading ? "Registering..." : "Create account"}
+            </button>
+          </div>
 
-          <div className="mt-4 text-center text-sm">
+          <div className="text-center text-sm">
             <p className="text-gray-600">
               Already have an account?{" "}
-              <a href="/login" className="text-blue-500 hover:underline">
+              <a href="/login" className="text-indigo-600 hover:text-indigo-500">
                 Sign in
               </a>
             </p>

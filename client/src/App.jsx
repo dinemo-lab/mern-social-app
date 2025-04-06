@@ -17,6 +17,7 @@ import {ToastContainer} from 'react-toastify'
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
 import FAQPage from './pages/Faq';
+import Footer from './components/Footer';
 
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
         '
         {/* Add more routes here as needed */}
       </Routes>
+      <Footer/>
       </GoogleOAuthProvider>
       </ChatProvider>
     </>
