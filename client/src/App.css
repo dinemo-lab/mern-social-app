@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
- 
+ /* main.css */
+body {
+    font-family: 'Poppins', sans-serif; /* or 'MyFont' if using local */
+  }
+  
 
  

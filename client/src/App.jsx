@@ -25,7 +25,7 @@ function App() {
     <ChatProvider>
      <ToastContainer
       position="top-right" // Position of the toast
-      autoClose={3000} // Auto-close after 3 seconds
+      autoClose={1000} // Auto-close after 3 seconds
       hideProgressBar={false} // Show or hide the progress bar
       newestOnTop={true} // Display newest toast on top
       closeOnClick // Close the toast when clicked
