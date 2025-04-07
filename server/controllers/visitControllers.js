@@ -187,53 +187,47 @@ export const getVisitDetails = async (req, res) => {
 
 export const getVisitById = async (req, res) => {
   try {
-    // First get the basic visit
-    const visit = await VisitRequest.findById(req.params.id);
-    
+    // Step 1: Get the basic visit data
+    const visit = await VisitRequest.findById(req.params.id)
+      .populate("user")
+      .lean();
+      
     if (!visit) {
       return res.status(404).json({ message: "Visit not found" });
     }
     
-    // Manually populate the main user
-    const organizer = await User.findById(visit.user).select('name email profilePicture isVerified');
+    // Step 2: Extract user IDs from join requests
+    const userIds = visit.joinRequests.map(req => req.user);
     
-    // Prepare result object
-    const result = visit.toObject();
-    result.user = organizer;
+    // Step 3: Fetch all these users in one go
+    const users = await User.find({ _id: { $in: userIds } })
+      .select("_id name email profilePicture isVerified")
+      .lean();
     
-    // Manually populate all join request users
-    if (result.joinRequests && result.joinRequests.length > 0) {
-      // Get all user IDs from join requests
-      const userIds = result.joinRequests.map(req => req.user);
-      
-      // Fetch all users in one query
-      const users = await User.find({ _id: { $in: userIds } })
-        .select('_id name email profilePicture isVerified')
-        .lean();
-      
-      // Create a map of user IDs to user objects
-      const userMap = {};
-      users.forEach(user => {
-        userMap[user._id.toString()] = user;
-      });
-      
-      // Replace user IDs with user objects in the join requests
-      result.joinRequests = result.joinRequests.map(req => {
-        const userId = typeof req.user === 'object' ? req.user.toString() : req.user;
-        return {
-          ...req,
-          user: userMap[userId] || { name: "Unknown User", _id: userId }
-        };
-      });
-    }
+    // Step 4: Create a map for easy lookup
+    const userMap = {};
+    users.forEach(user => {
+      userMap[user._id.toString()] = user;
+    });
     
-    console.log("Visit details with populated users:", result); // Log the result for debugging
-    res.json(result);
+    // Step 5: Attach user details to each join request
+    visit.joinRequests = visit.joinRequests.map(req => {
+      const userId = req.user.toString();
+      return {
+        ...req,
+        user: userMap[userId] || { _id: userId, name: "Unknown User" }
+      };
+    });
+    
+    // Step 6: Send the response
+    res.json(visit);
   } catch (error) {
-    console.error("Error fetching visit details:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
+    console.error("Error fetching visit:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
+
+
 
 // 📌 Get all visit requests
 export const getAllVisitRequests = async (req, res) => {
