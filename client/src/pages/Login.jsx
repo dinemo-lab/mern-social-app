@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../store/AuthSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -136,7 +136,18 @@ const Login = () => {
           </div>
         </form>
 
-        <div className="mt-6">
+        {/* Sign Up Link */}
+        <div className="text-sm text-center">
+          <p className="text-gray-600">
+            Don't have an account?{" "}
+            <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+              Sign up
+            </Link>
+          </p>
+        </div>
+
+        <div className="mt-6 text-center flex flex-col items-center justify-center">
+          <span className="text-sm text-gray-600 mb-3">Or continue with</span>
           <GoogleLogin
             onSuccess={handleGoogleLoginSuccess}
             onError={handleGoogleLoginFailure}
