@@ -125,7 +125,7 @@ const Footer = () => {
             <Link to="/sitemap" className="hover:text-white transition">Sitemap</Link>
             <Link to="/accessibility" className="hover:text-white transition">Accessibility</Link> */}
 
-            <p className='text-purple-200'>Made by Dinesh with Ai</p>
+            <p className='text-purple-200'>Made by Dinesh</p>
           </div>
         </div>
       </div>
