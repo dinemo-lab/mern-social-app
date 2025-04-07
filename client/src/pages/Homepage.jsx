@@ -618,23 +618,14 @@ const Home = () => {
       {/* Testimonials */}
       <section className="bg-gradient-to-r from-purple-800 via-indigo-700 to-purple-700 py-20 text-white">
         <div className="max-w-5xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-10">What Our Explorers Say</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <h2 className="text-3xl font-bold mb-10">What Our User Say</h2>
+          <div className="">
             <div className="bg-white/10 p-6 rounded-lg backdrop-blur-sm shadow-lg">
               <p className="italic mb-6">"I was traveling alone and found the perfect group to explore the city with. Made friends that I still keep in touch with!"</p>
-              <p className="font-semibold">Sarah K.</p>
-              <p className="text-purple-200 text-sm">New York</p>
+              <p className="font-semibold">Shiva</p>
+              <p className="text-purple-200 text-sm">Kanpur</p>
             </div>
-            <div className="bg-white/10 p-6 rounded-lg backdrop-blur-sm shadow-lg">
-              <p className="italic mb-6">"As a local, I love showing visitors my favorite hidden spots. This platform makes it easy to connect with travelers."</p>
-              <p className="font-semibold">Miguel R.</p>
-              <p className="text-purple-200 text-sm">Barcelona</p>
-            </div>
-            <div className="bg-white/10 p-6 rounded-lg backdrop-blur-sm shadow-lg">
-              <p className="italic mb-6">"Found an amazing food tour through this site. The local insights made it so much better than any commercial tour."</p>
-              <p className="font-semibold">Jen T.</p>
-              <p className="text-purple-200 text-sm">Tokyo</p>
-            </div>
+     
           </div>
         </div>
       </section>
