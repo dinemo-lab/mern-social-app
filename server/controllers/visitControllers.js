@@ -187,42 +187,18 @@ export const getVisitDetails = async (req, res) => {
 
 export const getVisitById = async (req, res) => {
   try {
-    // Step 1: Get the basic visit data
     const visit = await VisitRequest.findById(req.params.id)
       .populate("user")
-      .lean();
+      .populate({path:"joinRequests.user",select:"name email profilePicture isVerified"}); // Add this line to populate users in joinRequests
       
     if (!visit) {
       return res.status(404).json({ message: "Visit not found" });
     }
-    
-    // Step 2: Extract user IDs from join requests
-    const userIds = visit.joinRequests.map(req => req.user);
-    
-    // Step 3: Fetch all these users in one go
-    const users = await User.find({ _id: { $in: userIds } })
-      .select("_id name email profilePicture isVerified")
-      .lean();
-    
-    // Step 4: Create a map for easy lookup
-    const userMap = {};
-    users.forEach(user => {
-      userMap[user._id.toString()] = user;
-    });
-    
-    // Step 5: Attach user details to each join request
-    visit.joinRequests = visit.joinRequests.map(req => {
-      const userId = req.user.toString();
-      return {
-        ...req,
-        user: userMap[userId] || { _id: userId, name: "Unknown User" }
-      };
-    });
-    
-    // Step 6: Send the response
+   
+    console.log("Visit details:", visit); // Log the visit details for debugging
     res.json(visit);
   } catch (error) {
-    console.error("Error fetching visit:", error);
+    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
