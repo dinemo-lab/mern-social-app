@@ -19,8 +19,15 @@ const Login = () => {
     e.preventDefault();
     dispatch(loginUser({ email, password })).then((action) => {
       if (action.type === "auth/login/fulfilled") {
-        toast.success("Login successful! Redirecting...");
-        navigate("/"); // Redirect after successful login
+        // Check if the user is verified
+        const user = action.payload;
+        if (user.isVerified) {
+          toast.success("Login successful! Redirecting...");
+          navigate("/"); // Redirect after successful login
+        } else {
+          toast.warning("Please verify your email address before logging in.");
+          navigate("/resend-verification", { state: { email: user.email } });
+        }
       } else {
         toast.error("Login failed. Please check your credentials.");
       }
@@ -35,15 +42,20 @@ const Login = () => {
         token: googleToken,
       });
 
-      const { _id, name, email, token } = response.data;
-      const user = { _id, name, email, token };
+      const { _id, name, email, token, isVerified } = response.data;
+      const user = { _id, name, email, token, isVerified };
 
       localStorage.setItem("user", JSON.stringify(user));
 
       dispatch({ type: "auth/googleLogin/fulfilled", payload: user });
 
-      toast.success("Google login successful! Redirecting...");
-      navigate("/");
+      if (user.isVerified) {
+        toast.success("Google login successful! Redirecting...");
+        navigate("/");
+      } else {
+        // toast.warning("Please verify your email address before logging in.");
+        navigate("/resend-verification", { state: { email: user.email } });
+      }
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message;
       toast.error(`Google Login Error: ${errorMessage}`);
@@ -152,6 +164,13 @@ const Login = () => {
             onSuccess={handleGoogleLoginSuccess}
             onError={handleGoogleLoginFailure}
           />
+        </div>
+
+        {/* Resend Verification Link */}
+        <div className="text-sm text-center mt-4">
+          <Link to="/resend-verification" className="font-medium text-indigo-600 hover:text-indigo-500">
+            Didn't receive verification email?
+          </Link>
         </div>
       </div>
     </div>

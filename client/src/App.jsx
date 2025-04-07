@@ -18,6 +18,8 @@ import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import FAQPage from "./pages/Faq";
 import Footer from "./components/Footer";
+import VerificationRequired from "./pages/Verification";
+import VerifyEmail from "./pages/VerifyEmail";
 import ScrollToTop from "./components/ScrollTop";
 
 function App() {
@@ -53,6 +55,9 @@ function App() {
             <Route path="/my-visits" element={<MyVisits />} />
             <Route path="/profile/:id" element={<UserProfile />} />
             <Route path="/chat/:id" element={<ChatPage />} />'
+            <Route path="/resend-verification" element={<VerificationRequired />} />
+             
+            <Route path="/verify-email/:token" element={<VerifyEmail />} />
           </Routes>
           <Footer />
         </GoogleOAuthProvider>

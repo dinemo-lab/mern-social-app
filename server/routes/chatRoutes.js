@@ -1,6 +1,6 @@
 import express from "express";
 import { createChat, getChatByVisitId, requestToJoinChat, approveParticipant } from "../controllers/chatController.js";
-import protect from "../middleware/authMiddleware.js";
+import {protect} from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 

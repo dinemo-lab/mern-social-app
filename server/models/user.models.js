@@ -34,6 +34,12 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    verificationToken: {
+      type: String,
+    },
+    verificationExpires: {
+      type: Date,
+    },
     // Add social media links
     socialLinks: {
       linkedin: { type: String },

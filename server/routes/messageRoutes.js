@@ -1,6 +1,6 @@
 import express from "express";
 import { sendMessage, getMessagesByChatId } from "../controllers/messageController.js";
-import protect from "../middleware/authMiddleware.js";
+import {protect} from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 

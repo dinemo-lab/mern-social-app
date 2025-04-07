@@ -88,6 +88,18 @@ export const googleLogin = createAsyncThunk("auth/googleLogin", async (token, { 
   }
 });
 
+export const resendVerification = createAsyncThunk(
+  "auth/resendVerification",
+  async (email, { rejectWithValue }) => {
+    try {
+      await axios.post(`${API_URL}/resend-verification`, { email });
+      return { success: true };
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed to resend verification email");
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -181,7 +193,7 @@ const authSlice = createSlice({
       
       // Save the user and token in localStorage
       localStorage.setItem("user", JSON.stringify(action.payload)); // Save the entire user object
-      localStorage.setItem("token", action.payload.token); // Save the token separately
+      
 
       // Set the token in Axios headers for future requests
       axios.defaults.headers.common["Authorization"] = `Bearer ${action.payload.token}`;
@@ -189,6 +201,18 @@ const authSlice = createSlice({
     .addCase(googleLogin.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
+    });
+
+    builder.addCase(resendVerification.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(resendVerification.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(resendVerification.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     });
   },
 });

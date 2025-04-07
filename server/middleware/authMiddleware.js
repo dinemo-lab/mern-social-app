@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.models.js";
 
-const protect = async (req, res, next) => {
+export const protect = async (req, res, next) => {
   let token;
 
   if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
@@ -17,8 +17,8 @@ const protect = async (req, res, next) => {
       if (!req.user) {
         return res.status(401).json({ message: "Not authorized, user not found" });
       }
-
-      next();
+      
+      next(); 
     } catch (error) {
       console.error("Auth Middleware Error:", error);
       return res.status(401).json({ message: "Not authorized, invalid token" });
@@ -28,4 +28,4 @@ const protect = async (req, res, next) => {
   }
 };
 
-export default protect;
+ 
