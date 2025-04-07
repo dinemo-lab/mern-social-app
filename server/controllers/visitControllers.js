@@ -187,64 +187,53 @@ export const getVisitDetails = async (req, res) => {
 
 export const getVisitById = async (req, res) => {
   try {
-    // First fetch the visit
-    const visit = await VisitRequest.findById(req.params.id)
-      .populate("user");
-      
+    // First get the basic visit
+    const visit = await VisitRequest.findById(req.params.id);
+    
     if (!visit) {
       return res.status(404).json({ message: "Visit not found" });
     }
     
-    // Now manually populate each join request user
-    if (visit.joinRequests && visit.joinRequests.length > 0) {
-      // Convert to plain JS object 
-      const processedVisit = visit.toObject();
+    // Manually populate the main user
+    const organizer = await User.findById(visit.user).select('name email profilePicture isVerified');
+    
+    // Prepare result object
+    const result = visit.toObject();
+    result.user = organizer;
+    
+    // Manually populate all join request users
+    if (result.joinRequests && result.joinRequests.length > 0) {
+      // Get all user IDs from join requests
+      const userIds = result.joinRequests.map(req => req.user);
       
-      // Array to hold promises for fetching users
-      const userPromises = [];
+      // Fetch all users in one query
+      const users = await User.find({ _id: { $in: userIds } })
+        .select('_id name email profilePicture isVerified')
+        .lean();
       
-      for (let i = 0; i < processedVisit.joinRequests.length; i++) {
-        const request = processedVisit.joinRequests[i];
-        
-        // Only try to populate if user is a string/ObjectId
-        if (request.user && typeof request.user === 'string' || request.user instanceof mongoose.Types.ObjectId) {
-          // Create a promise to fetch this user
-          const userPromise = User.findById(request.user)
-            .select('name email profilePicture isVerified')
-            .lean()
-            .then(userData => {
-              if (userData) {
-                processedVisit.joinRequests[i].user = userData;
-              } else {
-                processedVisit.joinRequests[i].user = { name: "Unknown User" };
-              }
-            })
-            .catch(() => {
-              processedVisit.joinRequests[i].user = { name: "Unknown User" };
-            });
-          
-          userPromises.push(userPromise);
-        }
-      }
+      // Create a map of user IDs to user objects
+      const userMap = {};
+      users.forEach(user => {
+        userMap[user._id.toString()] = user;
+      });
       
-      // Wait for all user fetches to complete
-      await Promise.all(userPromises);
-      
-      // Send the processed visit with populated users
-      console.log("Processed visit:", processedVisit); // Log the processed visit for debugging
-      res.json(processedVisit);
-    } else {
-      // If no join requests, just send the visit
-  
-      res.json(visit);
+      // Replace user IDs with user objects in the join requests
+      result.joinRequests = result.joinRequests.map(req => {
+        const userId = typeof req.user === 'object' ? req.user.toString() : req.user;
+        return {
+          ...req,
+          user: userMap[userId] || { name: "Unknown User", _id: userId }
+        };
+      });
     }
-
+    
+    console.log("Visit details with populated users:", result); // Log the result for debugging
+    res.json(result);
   } catch (error) {
-    console.error("Error fetching visit:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error fetching visit details:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-
 
 // 📌 Get all visit requests
 export const getAllVisitRequests = async (req, res) => {

@@ -171,6 +171,7 @@ const VisitDetails = () => {
     );
   }
 
+  console.log("Current Visit:", currentVisit); // Debugging line to check the current visit object
   return (
     <div className="bg-gradient-to-b from-purple-50 to-white min-h-screen p-4 md:p-6 pt-6 md:pt-12">
       <div className="max-w-4xl mx-auto">
