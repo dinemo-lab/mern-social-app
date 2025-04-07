@@ -346,23 +346,10 @@ const VisitDetails = () => {
                 <div className="space-y-3 max-h-80 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-purple-200 scrollbar-track-transparent">
                   {currentVisit.joinRequests.map((request) => {
                     // Handle both user object or user ID string
-                    const userId =
-                      typeof request.user === "string"
-                        ? request.user
-                        : request.user?._id;
-                    const userName =
-                      typeof request.user === "string"
-                        ? `User #${request.user.substring(0, 6)}...`
-                        : request.user?.name || "Unknown User";
-                    const profilePicture =
-                      typeof request.user === "object" &&
-                      request.user?.profilePicture
-                        ? request.user.profilePicture
-                        : null;
-                    const isVerified =
-                      typeof request.user === "object" &&
-                      request.user?.isVerified;
-
+                    const userId = request.user?._id || request.user;
+                    const userName = request.user?.name || "Unknown User";
+                    const profilePicture = request.user?.profilePicture;
+                    const isVerified = request.user?.isVerified;
                     return (
                       <div
                         key={request._id}
