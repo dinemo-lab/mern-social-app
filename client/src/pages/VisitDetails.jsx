@@ -344,24 +344,32 @@ const VisitDetails = () => {
               {currentVisit.joinRequests &&
               currentVisit.joinRequests.length > 0 ? (
                 <div className="space-y-3 max-h-80 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-purple-200 scrollbar-track-transparent">
-                  {currentVisit.joinRequests.map((request) => {
-                    // Handle both user object or user ID string
+                  {currentVisit.joinRequests?.map((request) => {
+                    // More robust user ID extraction
                     const userId =
-                      typeof request.user === "string"
+                      request.user &&
+                      (typeof request.user === "string"
                         ? request.user
-                        : request.user?._id;
+                        : request.user._id || request.user.id);
+
+                    // More robust user name extraction
                     const userName =
-                      typeof request.user === "string"
+                      request.user &&
+                      (typeof request.user === "string"
                         ? `User #${request.user.substring(0, 6)}...`
-                        : request.user?.name || "Unknown User";
+                        : request.user.name || "Unknown User");
+
+                    // More robust profile picture extraction
                     const profilePicture =
+                      request.user &&
                       typeof request.user === "object" &&
-                      request.user?.profilePicture
-                        ? request.user.profilePicture
-                        : null;
+                      request.user.profilePicture;
+
+                    // More robust verification status extraction
                     const isVerified =
+                      request.user &&
                       typeof request.user === "object" &&
-                      request.user?.isVerified;
+                      request.user.isVerified;
 
                     return (
                       <div
