@@ -347,7 +347,7 @@ const VisitDetails = () => {
                   {currentVisit.joinRequests.map((request) => {
                     // Handle both user object or user ID string
                     const userId = request.user?._id || request.user;
-                    const userName = request.user?.name || "Unknown User";
+                    const userName = request.user?.name ;
                     const profilePicture = request.user?.profilePicture;
                     const isVerified = request.user?.isVerified;
                     return (
