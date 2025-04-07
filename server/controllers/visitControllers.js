@@ -187,17 +187,35 @@ export const getVisitDetails = async (req, res) => {
 
 export const getVisitById = async (req, res) => {
   try {
+    // First, fetch the visit with populated fields
     const visit = await VisitRequest.findById(req.params.id)
       .populate("user")
-      .populate("joinRequests.user"); // Add this line to populate users in joinRequests
+      .populate({
+        path: "joinRequests.user",
+        select: "name email profilePicture isVerified" // Select only needed fields
+      });
       
     if (!visit) {
       return res.status(404).json({ message: "Visit not found" });
     }
+    
+    // Ensure the joinRequests.user is properly processed
+    const processedVisit = visit.toObject();
+    
+    // Make sure each joinRequest has a properly formatted user object
+    if (processedVisit.joinRequests && processedVisit.joinRequests.length > 0) {
+      processedVisit.joinRequests = processedVisit.joinRequests.map(req => {
+        // If user is not populated or missing, provide a placeholder
+        if (!req.user) {
+          req.user = { name: "Unknown User" };
+        }
+        return req;
+      });
+    }
    
-    res.json(visit);
+    res.json(processedVisit);
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching visit:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
