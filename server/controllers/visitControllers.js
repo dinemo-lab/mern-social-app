@@ -185,13 +185,16 @@ export const getVisitDetails = async (req, res) => {
   }
 };
 
-
 export const getVisitById = async (req, res) => {
   try {
-    const visit = await VisitRequest.findById(req.params.id).populate("user"); // Ensure user data is populated
+    const visit = await VisitRequest.findById(req.params.id)
+      .populate("user")
+      .populate("joinRequests.user"); // Add this line to populate users in joinRequests
+      
     if (!visit) {
       return res.status(404).json({ message: "Visit not found" });
     }
+   
     res.json(visit);
   } catch (error) {
     console.error(error);

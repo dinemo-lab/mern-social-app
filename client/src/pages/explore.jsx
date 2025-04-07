@@ -17,9 +17,7 @@ const Explore = () => {
     if (user) {
       dispatch(fetchAllVisits())
         .unwrap()
-        .then(() => {
-           
-        })
+        .then(() => {})
         .catch((err) => {
           console.error("Failed to fetch visits:", err);
           toast.error("Failed to load visits. Please try again later.");
@@ -53,7 +51,9 @@ const Explore = () => {
 
   const handleJoinVisit = async (visitId, visitStatus) => {
     if (visitStatus === "locked" || visitStatus === "completed") {
-      toast.error("You cannot join this visit as it is either locked or completed.");
+      toast.error(
+        "You cannot join this visit as it is either locked or completed."
+      );
       return;
     }
 
@@ -71,10 +71,12 @@ const Explore = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100">
         <div className="max-w-md w-full p-8 bg-white rounded-2xl shadow-xl border border-purple-100">
-          <h1 className="text-3xl font-bold text-purple-800 mb-4 text-center">Sign In to Explore</h1>
+          <h1 className="text-3xl font-bold text-purple-800 mb-4 text-center">
+            Sign In to Explore
+          </h1>
           <p className="text-gray-600 mb-8 text-center">
-            Please sign in to view and join visits. Connect with other explorers and start your
-            journey today!
+            Please sign in to view and join visits. Connect with other explorers
+            and start your journey today!
           </p>
           <div className="flex flex-col space-y-4">
             <Link
@@ -111,6 +113,8 @@ const Explore = () => {
       </div>
     );
 
+  console.log("Visits:", visits); // Debugging line to check the visits data
+
   return (
     <div className="bg-gradient-to-br from-purple-50 to-indigo-100 min-h-screen p-6">
       <div className="max-w-6xl mx-auto">
@@ -126,8 +130,12 @@ const Explore = () => {
 
         {visits.length === 0 ? (
           <div className="bg-white p-8 rounded-xl shadow-md text-center border border-purple-100">
-            <p className="text-gray-600 text-lg">No visits available at the moment.</p>
-            <p className="mt-2 text-gray-500">Check back later or create a new visit!</p>
+            <p className="text-gray-600 text-lg">
+              No visits available at the moment.
+            </p>
+            <p className="mt-2 text-gray-500">
+              Check back later or create a new visit!
+            </p>
             <Link
               to="/create-visit"
               className="mt-6 inline-block bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition shadow-md"
@@ -188,31 +196,45 @@ const Explore = () => {
                     <div className="grid grid-cols-2 gap-3 mb-4">
                       <div className="flex items-center text-gray-600">
                         <MapPin className="h-4 w-4 mr-2 text-purple-500" />
-                        <span className="text-sm truncate">{visit.location}</span>
+                        <span className="text-sm truncate">
+                          {visit.location}
+                        </span>
                       </div>
 
                       <div className="flex items-center text-gray-600">
                         <Calendar className="h-4 w-4 mr-2 text-purple-500" />
-                        <span className="text-sm truncate">{formatDate(visit.date)}</span>
+                        <span className="text-sm truncate">
+                          {formatDate(visit.date)}
+                        </span>
                       </div>
 
                       <div className="flex items-center text-gray-600 col-span-2">
                         <Clock className="h-4 w-4 mr-2 text-purple-500" />
-                        <span className="text-sm">Created {new Date(visit.createdAt).toLocaleDateString()}</span>
+                        <span className="text-sm">
+                          Created{" "}
+                          {new Date(visit.createdAt).toLocaleDateString()}
+                        </span>
                       </div>
                     </div>
 
-                    {hasJoined ? (
+                    {visit.user._id === user._id ? (
+                      <div className="w-full mt-3 bg-blue-100 text-blue-700 py-2 rounded-lg text-center font-medium shadow-sm">
+                        You are the Organizer
+                      </div>
+                    ) : hasJoined ? (
                       <div className="w-full mt-3 bg-green-100 text-green-700 py-2 rounded-lg text-center font-medium shadow-sm">
                         Already Joined
                       </div>
-                    ) : visit.status === "locked" || visit.status === "completed" ? (
+                    ) : visit.status === "locked" ||
+                      visit.status === "completed" ? (
                       <div className="w-full mt-3 bg-gray-100 text-gray-700 py-2 rounded-lg text-center font-medium shadow-sm">
-                        Cannot Join - {visit.status.charAt(0).toUpperCase() + visit.status.slice(1)}
+                        Cannot Join -{" "}
+                        {visit.status.charAt(0).toUpperCase() +
+                          visit.status.slice(1)}
                       </div>
                     ) : (
                       <button
-                        className="w-full mt-3 bg-white border-2 border-purple-500 text-purple-600 hover:bg-purple-500 hover:text-white py-2 rounded-lg transition-all duration-300 font-medium shadow-sm group-hover:shadow-md"
+                        className="w-full mt-3 cursor-pointer  bg-white border-2 border-purple-500 text-purple-600 hover:bg-purple-500 hover:text-white py-2 rounded-lg transition-all duration-300 font-medium shadow-sm group-hover:shadow-md"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleJoinVisit(visit._id, visit.status);

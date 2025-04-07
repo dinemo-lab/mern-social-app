@@ -10,6 +10,9 @@ const ChatBox = ({ chatId, userId, userName}) => {
   const [isTyping, setIsTyping] = useState(false);
   const typingTimeoutRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const scrollRef = useRef(null);
+  const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
+  const [userScrolled, setUserScrolled] = useState(false);
 
   // Initialize socket connection
   useEffect(() => {
@@ -48,6 +51,11 @@ const ChatBox = ({ chatId, userId, userName}) => {
         delete newTypingUsers[message.sender];
         return newTypingUsers;
       });
+      
+      // Only auto-scroll if user hasn't manually scrolled up
+      if (!userScrolled) {
+        setShouldAutoScroll(true);
+      }
     };
     
     // Listen for typing indicators
@@ -78,12 +86,57 @@ const ChatBox = ({ chatId, userId, userName}) => {
       socket.off("userStoppedTyping", handleUserStoppedTyping);
       socket.emit("leaveChat", chatId);
     };
-  }, [socket, chatId]);
+  }, [socket, chatId, userScrolled]);
 
-  // Auto-scroll to bottom of messages
+  // Handle scroll detection
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, typingUsers]);
+    const handleScroll = () => {
+      const container = scrollRef.current;
+      if (!container) return;
+      
+      // Calculate if user has scrolled up
+      const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 50;
+      
+      if (!isAtBottom) {
+        setUserScrolled(true);
+      } else {
+        setUserScrolled(false);
+      }
+      
+      setShouldAutoScroll(isAtBottom);
+    };
+    
+    const scrollContainer = scrollRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll);
+      return () => scrollContainer.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
+
+  // Modified auto-scroll behavior - only scroll the chat container, not the page
+  useEffect(() => {
+    if (shouldAutoScroll && messagesEndRef.current) {
+      const container = scrollRef.current;
+      if (container) {
+        container.scrollTo({
+          top: container.scrollHeight,
+          behavior: "smooth"
+        });
+      }
+    }
+  }, [messages, shouldAutoScroll]);
+  
+  // Separate effect for typing indicator updates to avoid triggering scroll
+  useEffect(() => {
+    // Only scroll for typing indicators if we're already at the bottom
+    if (shouldAutoScroll && Object.keys(typingUsers).length > 0 && scrollRef.current) {
+      const container = scrollRef.current;
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: "smooth"
+      });
+    }
+  }, [typingUsers, shouldAutoScroll]);
 
   // Clean up typing users who haven't updated their status in 3 seconds
   useEffect(() => {
@@ -91,12 +144,15 @@ const ChatBox = ({ chatId, userId, userName}) => {
       const now = Date.now();
       setTypingUsers(prev => {
         const newTypingUsers = { ...prev };
+        let changed = false;
         Object.keys(newTypingUsers).forEach(key => {
           if (now - newTypingUsers[key].timestamp > 3000) {
             delete newTypingUsers[key];
+            changed = true;
           }
         });
-        return newTypingUsers;
+        // Only trigger a re-render if something changed
+        return changed ? newTypingUsers : prev;
       });
     }, 1000);
 
@@ -113,7 +169,7 @@ const ChatBox = ({ chatId, userId, userName}) => {
     // If user wasn't typing before, emit typing event
     if (!isTyping) {
       setIsTyping(true);
-      socket.emit("typing", { chatId, userId, username: userName }); // Use the actual username
+      socket.emit("typing", { chatId, userId, username: userName });
     }
   
     // Clear existing timeout
@@ -149,6 +205,19 @@ const ChatBox = ({ chatId, userId, userName}) => {
     socket.emit("stoppedTyping", { chatId, userId });
     
     setNewMessage("");
+    
+    // Smoothly scroll only the chat container when sending a message
+    if (scrollRef.current) {
+      setUserScrolled(false);
+      setShouldAutoScroll(true);
+      // Use a small timeout to ensure the DOM updates with the new message first
+      setTimeout(() => {
+        scrollRef.current.scrollTo({
+          top: scrollRef.current.scrollHeight,
+          behavior: "smooth"
+        });
+      }, 50);
+    }
   };
 
   // Handle Enter key press
@@ -184,11 +253,14 @@ const ChatBox = ({ chatId, userId, userName}) => {
 
   const messageGroups = getMessageGroups();
   const activeTypingUsers = Object.values(typingUsers).filter(user => user.id !== userId);
-
+   console.log("Active Typing Users:", activeTypingUsers); // Debugging line to check typing users
   return (
     <div className="flex flex-col h-[500px] rounded-xl overflow-hidden border border-purple-100 bg-white">
       {/* Messages Section */}
-      <div className="flex-1 overflow-y-auto p-5 space-y-6 bg-gradient-to-br from-white to-purple-50">
+      <div 
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto p-5 space-y-6 bg-gradient-to-br from-white to-purple-50"
+      >
         {messages.length > 0 ? (
           messageGroups.map((group, groupIndex) => {
             const isCurrentUser = group[0].sender === userId;
@@ -206,9 +278,7 @@ const ChatBox = ({ chatId, userId, userName}) => {
                     
                   </div>
                   <span className={`text-sm font-medium ${isCurrentUser ? 'text-purple-700' : 'text-gray-700'}`}>
-                    {isCurrentUser ? 'You' : group[0].senderName || 'User'
-                    
-                    }
+                    {isCurrentUser ? 'You' : group[0].senderName || 'User'}
                   </span>
                 </div>
                 
@@ -246,12 +316,9 @@ const ChatBox = ({ chatId, userId, userName}) => {
           </div>
         )}
         
-        {/* Typing indicator */}
-       
-       
         
+        {/* Typing indicator */}
         {activeTypingUsers.length > 0 && (
-          console.log("hii",activeTypingUsers),
           <div className="flex items-start space-x-2">
             <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
               <User size={16} className="text-gray-600" />
@@ -260,7 +327,6 @@ const ChatBox = ({ chatId, userId, userName}) => {
               <div className="flex items-center">
                 <span className="text-sm text-gray-700 mr-2">
                   {activeTypingUsers.length === 1 
-                 
                     ? `${activeTypingUsers[0].name} is typing` 
                     : `${activeTypingUsers.length} people are typing`}
                 </span>

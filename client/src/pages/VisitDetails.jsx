@@ -34,6 +34,8 @@ const VisitDetails = () => {
     }
   }, [dispatch, id]);
 
+  console.log("Current Visit:", currentVisit); // Debugging line to check the current visit object
+
   const handleStatusChange = async (requestId, newStatus) => {
     try {
       await dispatch(
@@ -50,7 +52,6 @@ const VisitDetails = () => {
     }
   };
 
-  
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
@@ -298,21 +299,19 @@ const VisitDetails = () => {
               </div>
             </div>
 
-            <div className="border-t border-gray-200 pt-8 mb-8">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                <div className="bg-purple-100 p-2 rounded-lg mr-3">
-                  <MapPin className="h-5 w-5 text-purple-600" />
-                </div>
-                Meeting Point
-              </h2>
-              <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
-                <p className="text-gray-700 mb-2">
-                  <strong>Name:</strong>{" "}
+            <div className="bg-purple-50 rounded-2xl p-5 flex items-start group hover:bg-purple-100 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md">
+              <div className="bg-white p-4 rounded-xl mr-4 shadow-sm group-hover:shadow-md transition-all duration-300 border border-purple-100">
+                <MapPin className="h-6 w-6 text-purple-600" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-purple-600 font-medium uppercase tracking-wider">
+                  Meeting Point
+                </p>
+                <p className="text-lg text-gray-800 font-medium mb-2">
                   {currentVisit.meetingPoint?.name ||
                     "No meeting point specified"}
                 </p>
-                <p className="text-gray-700">
-                  <strong>Address:</strong>{" "}
+                <p className="text-gray-600">
                   {currentVisit.meetingPoint?.address || "No address provided"}
                 </p>
               </div>
@@ -355,10 +354,14 @@ const VisitDetails = () => {
                       typeof request.user === "string"
                         ? `User #${request.user.substring(0, 6)}...`
                         : request.user?.name || "Unknown User";
-                    const userEmail =
-                      typeof request.user === "object" && request.user?.email
-                        ? request.user.email
-                        : "";
+                    const profilePicture =
+                      typeof request.user === "object" &&
+                      request.user?.profilePicture
+                        ? request.user.profilePicture
+                        : null;
+                    const isVerified =
+                      typeof request.user === "object" &&
+                      request.user?.isVerified;
 
                     return (
                       <div
@@ -366,21 +369,43 @@ const VisitDetails = () => {
                         className="flex items-center justify-between bg-gray-50 p-5 rounded-xl border border-gray-100 hover:shadow-md transition-all duration-300 hover:border-purple-200"
                       >
                         <div className="flex items-center">
-                          <div className="bg-purple-100 p-3 rounded-xl mr-4 border border-purple-200">
-                            <User className="h-5 w-5 text-purple-600" />
-                          </div>
-                          <div>
+                          {profilePicture ? (
+                            <div className="h-12 w-12 rounded-full overflow-hidden mr-4">
+                              <img
+                                src={profilePicture}
+                                alt={userName}
+                                className="h-full w-full object-cover rounded-lg"
+                              />
+                            </div>
+                          ) : (
+                            <div className="bg-purple-100 p-3 rounded-xl mr-4 border border-purple-200 h-12 w-12 flex items-center justify-center overflow-hidden">
+                              <User className="h-5 w-5 text-purple-600" />
+                            </div>
+                          )}
+
+                          <div className="flex items-center">
                             <button
                               onClick={() => navigate(`/profile/${userId}`)}
-                              className="text-purple-600 font-medium hover:underline"
+                              className="text-purple-600 font-medium hover:underline mr-2 cursor-pointer"
                             >
                               {userName}
                             </button>
-                            {userEmail && (
-                              <p className="text-sm text-gray-500">
-                                {userEmail}
-                              </p>
-                            )}
+                            {isVerified !== undefined &&
+                              (isVerified ? (
+                                <div
+                                  className="bg-green-100 p-1 rounded-full"
+                                  title="Verified User"
+                                >
+                                  <Check className="h-3 w-3 text-green-600" />
+                                </div>
+                              ) : (
+                                <div
+                                  className="bg-red-100 p-1 rounded-full"
+                                  title="Not Verified"
+                                >
+                                  <X className="h-3 w-3 text-red-600" />
+                                </div>
+                              ))}
                           </div>
                         </div>
 

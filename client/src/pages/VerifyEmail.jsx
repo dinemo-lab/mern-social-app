@@ -105,7 +105,7 @@ const VerifyEmail = () => {
           </div>
         )}
 
-        {verificationStatus === "success" && (
+        {/* {verificationStatus === "success" && (
           <div className="flex justify-center">
             <Link
               to="/login"
@@ -114,7 +114,7 @@ const VerifyEmail = () => {
               Login Now
             </Link>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

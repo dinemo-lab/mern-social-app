@@ -21,6 +21,7 @@ import Footer from "./components/Footer";
 import VerificationRequired from "./pages/Verification";
 import VerifyEmail from "./pages/VerifyEmail";
 import ScrollToTop from "./components/ScrollTop";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
         <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
           <Navbar />
           <Routes>
+            <Route path="*" element={<NotFoundPage/>} />"
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

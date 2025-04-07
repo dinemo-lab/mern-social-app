@@ -157,9 +157,9 @@ const Register = () => {
       dispatch(registerUser(userData)).then((action) => {
         if (action.type === "auth/register/fulfilled") {
           toast.success("Registration successful! Redirecting...");
-          if(userData.isVerified) {
-            navigate("/resend-verification", { state: { email: formData.email } });
-          }
+          // if(userData.isVerified) {
+          //   navigate("/resend-verification", { state: { email: formData.email } });
+          // }
           navigate("/");
         } else {
           toast.error("Registration failed. Please try again.");

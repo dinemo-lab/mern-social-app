@@ -20,8 +20,8 @@ const ChatPage = () => {
     );
   }
 
-  console.log("Current Chat:", user); // Debugging line to check the current chat object
-
+   // Debugging line to check the current chat object
+  console.log("User:", currentChat); // Debugging line to check the user object
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50 p-6">
       <div className="max-w-4xl mx-auto">
@@ -31,12 +31,12 @@ const ChatPage = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold">Group Chat</h1>
-                <div className="flex items-center mt-1 text-purple-100">
+                {/* <div className="flex items-center mt-1 text-purple-100">
                   <Users size={16} className="mr-2" />
                   <p className="text-sm">
                     {currentChat.members ? currentChat.members.length : "2"} members
                   </p>
-                </div>
+                </div> */}
               </div>
               <div className="bg-black bg-opacity-20 px-4 py-2 rounded-full">
                 <p className="text-sm font-medium">Active Now</p>
