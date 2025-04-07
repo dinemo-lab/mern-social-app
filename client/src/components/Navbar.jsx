@@ -122,10 +122,10 @@ const Navbar = () => {
               Explore
             </Link>
             <Link to="/about" className="hover:text-purple-200 transition duration-150 font-medium text-white">
-              About Us
+              About 
             </Link>
             <Link to="/contact" className="hover:text-purple-200 transition duration-150 font-medium text-white">
-              Contact Us
+              Contact 
             </Link>
           </div>
 
@@ -252,14 +252,14 @@ const Navbar = () => {
                   className="hover:bg-purple-500 py-2 px-3 rounded transition duration-150 text-white"
                   onClick={() => setIsOpen(false)}
                 >
-                  About Us
+                  About 
                 </Link>
                 <Link
                   to="/contact"
                   className="hover:bg-purple-500 py-2 px-3 rounded transition duration-150 text-white"
                   onClick={() => setIsOpen(false)}
                 >
-                  Contact Us
+                  Contact 
                 </Link>
                 <div className="border-t border-purple-400 my-2 pt-2">
                   {user ? (
