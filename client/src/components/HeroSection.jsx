@@ -74,7 +74,7 @@ const HeroSection = () => {
             className="mb-6"
           >
             <span className="px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-sm font-medium inline-block mb-6 border border-white/40 shadow-lg shadow-white/20">
-              Local Exploration Redefined
+              Incredible India Experience
             </span>
           </motion.div>
           <motion.h1
@@ -85,7 +85,7 @@ const HeroSection = () => {
           >
             <span className="block">Explore With</span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-cyan-200">
-              Locals & Travelers
+              Local Indians & Travelers
             </span>
           </motion.h1>
           <motion.p
@@ -94,8 +94,8 @@ const HeroSection = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.9 }}
           >
-            Discover hidden gems, connect with people, and create unforgettable
-            experiences in any city you visit.
+            Discover hidden treasures, connect with locals, and create unforgettable
+            experiences in India's diverse cities and villages.
           </motion.p>
 
           <motion.div
@@ -200,17 +200,17 @@ const HeroSection = () => {
                     </div>
                     <h3 className="text-xl font-bold mb-2">
                       {index === 0
-                        ? "Historic Downtown Tour"
+                        ? "Old Delhi Heritage Walk"
                         : index === 1
-                        ? "Food Market Exploration"
-                        : "Sunset Photography Walk"}
+                        ? "Goa Spice Plantation Tour"
+                        : "Varanasi Ganga Aarti Experience"}
                     </h3>
                     <p className="text-sm text-white/80 line-clamp-3">
                       {index === 0
-                        ? "Discover hidden architectural gems and learn about the city's rich history with local guides."
+                        ? "Explore the narrow lanes of Chandni Chowk and discover hidden architectural gems with local history experts."
                         : index === 1
-                        ? "Sample authentic local cuisine and specialties while exploring vibrant market streets."
-                        : "Capture stunning sunset views at the best photography spots with fellow enthusiasts."}
+                        ? "Savor authentic Indian spices and learn traditional cooking techniques in vibrant Goan plantations."
+                        : "Witness the mesmerizing evening ritual on the banks of the sacred Ganges river with spiritual guides."}
                     </p>
                   </div>
                   <div className="flex items-center justify-between mt-4">
@@ -235,10 +235,10 @@ const HeroSection = () => {
                       <MapPinIcon size={14} />
                       <span>
                         {index === 0
-                          ? "Downtown"
+                          ? "Old Delhi"
                           : index === 1
-                          ? "Central Market"
-                          : "Harbor View"}
+                          ? "Ponda, Goa"
+                          : "Dashashwamedh Ghat"}
                       </span>
                     </div>
                   </div>

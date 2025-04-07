@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {FaFacebook, FaTwitter,FaInstagram  ,FaPhoneSquareAlt ,FaGithub} from 'react-icons/fa';
+import {FaFacebook, FaTwitter,FaInstagram  ,FaPhoneSquareAlt ,FaGithub, FaLinkedin} from 'react-icons/fa';
 import { FiMapPin } from "react-icons/fi";
 import { MdEmail } from "react-icons/md";
 
@@ -29,12 +29,12 @@ const Footer = () => {
               Connect with fellow travelers and locals for authentic experiences and adventures.
             </p>
             <div className="flex gap-4">
-              <a href='' className='text-purle-200 hover:text-white transition'>
+              <Link to="https://github.com/dinemo-lab" target="_blank"  className='text-purle-200 hover:text-white transition'>
                 <FaGithub size={20}/>
-              </a>
-              <a href="" className="text-purple-200 hover:text-white transition">
-                <FaTwitter size={20} />
-              </a>
+              </Link>
+              <Link to="https://www.linkedin.com/in/dineshmaurya12/" target='blank' className="text-purple-200 hover:text-white transition">
+                <FaLinkedin size={20} />
+              </Link>
               
             </div>
           </motion.div>
