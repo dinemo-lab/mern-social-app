@@ -85,11 +85,11 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-purple-50 py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
           {/* Profile header section with purple gradient */}
-          <div className="relative h-56 bg-gradient-to-br from-purple-600 via-purple-500 to-indigo-600">
+          <div className="relative h-64 bg-gradient-to-br from-purple-600 via-purple-500 to-indigo-600">
             <div className="absolute top-0 left-0 w-full h-full opacity-20">
               <svg
                 width="100%"
@@ -115,7 +115,7 @@ const Profile = () => {
                 <rect width="100%" height="100%" fill="url(#smallGrid)" />
               </svg>
             </div>
-            <div className="absolute -bottom-16 left-8">
+            <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
               {userProfile.profilePicture ? (
                 <img
                   src={userProfile.profilePicture}
@@ -131,85 +131,76 @@ const Profile = () => {
           </div>
 
           {/* Profile content */}
-          <div className="pt-20 pb-8 px-6 sm:px-10">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">
-                  {userProfile.name}
-                </h1>
-                <p className="text-gray-600 flex items-center mt-1">
-                  <Mail className="h-4 w-4 mr-2 text-purple-500" />
-                  {userProfile.email}
-                </p>
-              </div>
-              <div className="flex flex-row items-center sm:items-start mt-4 sm:mt-0">
-              <div className="flex items-center mt-4 sm:mt-0">
+          <div className="pt-24 pb-12 px-6 sm:px-10">
+            <div className="flex flex-col items-center mb-10">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                {userProfile.name}
+              </h1>
+              <p className="text-gray-600 flex items-center mb-4">
+                <Mail className="h-4 w-4 mr-2 text-purple-500" />
+                {userProfile.email}
+              </p>
+              
+              <div className="flex flex-wrap justify-center gap-4 mt-2">
                 {userProfile.isVerified ? (
-                  <>
+                  <div className="flex items-center bg-green-50 px-4 py-2 rounded-full">
                     <FaCheckCircle className="h-5 w-5 text-green-500 mr-2" />
-                    <span className="text-medium text-black">
+                    <span className="text-sm font-medium text-green-700">
                       Verified User
                     </span>
-                  </>
+                  </div>
                 ) : (
-                  <>
-                    {/* <FaCheckCircle className="h-5 w-5 text-red-500 mr-2" />
-                    <span className="text-medium text-black ">
-                      Unverified User
-                    </span> */}
-                    <button
-                      className="mr-6 mt-4 sm:mt-0 flex items-center px-5 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full text-white hover:opacity-90 transition-opacity shadow-md cursor-pointer"
-                      onClick={() => {
-                        navigate("/resend-verification", {
-                          state: { email: userProfile.email },
-                        });
-                      }}
-                    >
-                      Verify Profile
-                    </button>
-                  </>
+                  <button
+                    className="flex items-center px-5 py-2 bg-gradient-to-r from-orange-400 to-orange-500 rounded-full text-white hover:opacity-90 transition-opacity shadow-md cursor-pointer"
+                    onClick={() => {
+                      navigate("/resend-verification", {
+                        state: { email: userProfile.email },
+                      });
+                    }}
+                  >
+                    <FaCheckCircle className="h-4 w-4 mr-2" />
+                    Verify Profile
+                  </button>
                 )}
+                
+                <button
+                  className="flex cursor-pointer items-center px-5 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full text-white hover:opacity-90 transition-opacity shadow-md"
+                  onClick={() => setIsEditModalOpen(true)}
+                >
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit Profile
+                </button>
               </div>
-              <div className="flex items-center mt-4 sm:mt-0">
-              <button
-                className="mt-4 sm:mt-0 flex cursor-pointer items-center px-5 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full text-white hover:opacity-90 transition-opacity shadow-md"
-                onClick={() => setIsEditModalOpen(true)}
-              >
-                <Edit className="h-4 w-4 mr-2" />
-                Edit Profile
-              </button>
-              </div>
-             </div>
             </div>
 
             {/* Profile information cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
               {/* Personal Information */}
-              <div className="bg-white rounded-2xl p-6 shadow-md border border-purple-100">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-purple-100 hover:shadow-lg transition-shadow">
+                <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
                   <User className="h-5 w-5 mr-2 text-purple-500" />
                   Personal Information
                 </h2>
-                <div className="space-y-4">
-                  <div className="flex">
-                    <div className="w-1/3 text-gray-500 font-medium">
+                <div className="space-y-6">
+                  <div className="flex flex-col space-y-1">
+                    <div className="text-gray-500 font-medium text-sm">
                       Full Name
                     </div>
-                    <div className="w-2/3 text-gray-900">
+                    <div className="text-gray-900 font-medium">
                       {userProfile.name}
                     </div>
                   </div>
-                  <div className="flex">
-                    <div className="w-1/3 text-gray-500 font-medium">Email</div>
-                    <div className="w-2/3 text-gray-900">
+                  <div className="flex flex-col space-y-1">
+                    <div className="text-gray-500 font-medium text-sm">Email</div>
+                    <div className="text-gray-900">
                       {userProfile.email}
                     </div>
                   </div>
-                  <div className="flex">
-                    <div className="w-1/3 text-gray-500 font-medium">
+                  <div className="flex flex-col space-y-1">
+                    <div className="text-gray-500 font-medium text-sm">
                       Member Since
                     </div>
-                    <div className="w-2/3 text-gray-900">
+                    <div className="text-gray-900">
                       {new Date(userProfile.createdAt).toLocaleDateString(
                         "en-US",
                         { month: "long", year: "numeric" }
@@ -218,12 +209,12 @@ const Profile = () => {
                   </div>
 
                   {/* Skills section */}
-                  <div className="flex">
-                    <div className="w-1/3 text-gray-500 font-medium flex items-center">
+                  <div className="flex flex-col space-y-2 pt-2">
+                    <div className="text-gray-700 font-medium flex items-center">
                       <Briefcase className="h-4 w-4 mr-2 text-purple-500" />
                       Skills
                     </div>
-                    <div className="w-2/3">
+                    <div>
                       {userProfile.skills && userProfile.skills.length > 0 ? (
                         <div className="flex flex-wrap gap-2">
                           {userProfile.skills.map((skill, index) => (
@@ -236,7 +227,7 @@ const Profile = () => {
                           ))}
                         </div>
                       ) : (
-                        <span className="text-gray-500 italic">
+                        <span className="text-gray-500 italic text-sm">
                           No skills added
                         </span>
                       )}
@@ -244,12 +235,12 @@ const Profile = () => {
                   </div>
 
                   {/* Interests section */}
-                  <div className="flex">
-                    <div className="w-1/3 text-gray-500 font-medium flex items-center">
+                  <div className="flex flex-col space-y-2">
+                    <div className="text-gray-700 font-medium flex items-center">
                       <Heart className="h-4 w-4 mr-2 text-purple-500" />
                       Interests
                     </div>
-                    <div className="w-2/3">
+                    <div>
                       {userProfile.interests &&
                       userProfile.interests.length > 0 ? (
                         <div className="flex flex-wrap gap-2">
@@ -263,7 +254,7 @@ const Profile = () => {
                           ))}
                         </div>
                       ) : (
-                        <span className="text-gray-500 italic">
+                        <span className="text-gray-500 italic text-sm">
                           No interests added
                         </span>
                       )}
@@ -273,23 +264,24 @@ const Profile = () => {
               </div>
 
               {/* Location & Social Information */}
-              <div className="bg-white rounded-2xl p-6 shadow-md border border-purple-100">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+              <div className="bg-white rounded-2xl p-8 shadow-md border border-purple-100 hover:shadow-lg transition-shadow">
+                <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
                   <MapPin className="h-5 w-5 mr-2 text-purple-500" />
                   Location & Social
                 </h2>
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {userProfile.location &&
                   userProfile.location.coordinates.length > 0 ? (
-                    <div className="flex">
-                      <div className="w-1/3 text-gray-500 font-medium">
-                        Coordinates
+                    <div className="flex flex-col space-y-1">
+                      <div className="text-gray-500 font-medium text-sm">
+                        Location
                       </div>
-                      <div className="w-2/3 text-gray-900 flex items-center">
+                      <div className="text-gray-900 flex items-center">
                         <MapPin className="h-4 w-4 mr-2 text-purple-500" />
                         <span>
-                          Longitude: {userProfile.location.coordinates[0]},
-                          Latitude: {userProfile.location.coordinates[1]}
+                          Longitude: {userProfile.location.coordinates[0].toFixed(4)},
+                          <br />
+                          Latitude: {userProfile.location.coordinates[1].toFixed(4)}
                         </span>
                       </div>
                     </div>
@@ -301,8 +293,8 @@ const Profile = () => {
                   )}
 
                   {/* Social links */}
-                  <div>
-                    <div className="text-gray-500 font-medium mb-3">
+                  <div className="pt-2">
+                    <div className="text-gray-700 font-medium mb-4">
                       Social Links
                     </div>
                     {userProfile.socialLinks &&
@@ -315,10 +307,10 @@ const Profile = () => {
                             href={userProfile.socialLinks.linkedin}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+                            className="flex items-center text-blue-600 hover:text-blue-800 transition-colors p-2 rounded-lg hover:bg-blue-50"
                           >
                             <svg
-                              className="h-5 w-5 mr-2"
+                              className="h-5 w-5 mr-3"
                               viewBox="0 0 24 24"
                               fill="currentColor"
                             >
@@ -332,10 +324,10 @@ const Profile = () => {
                             href={userProfile.socialLinks.twitter}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center text-blue-400 hover:text-blue-600 transition-colors"
+                            className="flex items-center text-blue-400 hover:text-blue-600 transition-colors p-2 rounded-lg hover:bg-blue-50"
                           >
                             <svg
-                              className="h-5 w-5 mr-2"
+                              className="h-5 w-5 mr-3"
                               viewBox="0 0 24 24"
                               fill="currentColor"
                             >
@@ -349,10 +341,10 @@ const Profile = () => {
                             href={userProfile.socialLinks.instagram}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center text-purple-500 hover:text-purple-700 transition-colors"
+                            className="flex items-center text-purple-500 hover:text-purple-700 transition-colors p-2 rounded-lg hover:bg-purple-50"
                           >
                             <svg
-                              className="h-5 w-5 mr-2"
+                              className="h-5 w-5 mr-3"
                               viewBox="0 0 24 24"
                               fill="currentColor"
                             >
@@ -381,8 +373,8 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="mt-10 pt-6 border-t border-gray-200 flex justify-end">
-              <button className="flex items-center cursor-pointer px-5 py-2 bg-white border border-red-300 rounded-full text-red-500 hover:bg-red-50 transition-colors shadow-sm">
+            <div className="mt-12 pt-8 border-t border-gray-200 flex justify-center">
+              <button className="flex items-center cursor-pointer px-6 py-3 bg-white border border-red-300 rounded-full text-red-500 hover:bg-red-50 transition-colors shadow-sm">
                 <LogOut className="h-4 w-4 mr-2" />
                 Logout
               </button>
