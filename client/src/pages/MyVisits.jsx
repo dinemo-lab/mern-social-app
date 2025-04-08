@@ -18,7 +18,7 @@ const MyVisits = () => {
   const [activeTab, setActiveTab] = useState("active");
 
   useEffect(() => {
-    console.log("Dispatching fetchMyVisits");
+     
     dispatch(fetchMyVisits());
   }, [dispatch]);
 

@@ -39,7 +39,7 @@ const CreateVisit = () => {
     libraries,
   });
 
-  console.log("suggested placess",showPlacesSuggestions);
+   
   const fetchNearbyPlaces = (lat, lng) => {
     if (!isLoaded || !window.google) return;
 

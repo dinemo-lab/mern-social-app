@@ -161,8 +161,7 @@ export const getVisitDetails = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Find the visit request by ID
-      console.log("Visit ID:", id); // Log the visit ID for debugging
+   
      if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "Invalid visit request ID" });
     }
@@ -175,8 +174,8 @@ export const getVisitDetails = async (req, res) => {
       return res.status(404).json({ message: "Visit request not found" });
     }
 
-
-    console.log("Visit details:", visit); 
+ 
+    
     res.status(200).json(visit);
     // Log the visit details for debugging
   } catch (error) {

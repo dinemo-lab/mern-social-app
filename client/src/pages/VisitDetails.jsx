@@ -5,6 +5,8 @@ import {
   fetchVisitDetails,
   updateJoinRequestStatus,
 } from "../store/VisitSlice";
+import ExpenseSharing from "./ExpenseSharing";
+
 import {
   Calendar,
   MapPin,
@@ -34,7 +36,7 @@ const VisitDetails = () => {
     }
   }, [dispatch, id]);
 
-  console.log("Current Visit:", currentVisit); // Debugging line to check the current visit object
+  
 
   const handleStatusChange = async (requestId, newStatus) => {
     try {
@@ -170,8 +172,10 @@ const VisitDetails = () => {
       </div>
     );
   }
+ 
 
-  console.log("Current Visit:", currentVisit); // Debugging line to check the current visit object
+
+  
   return (
     <div className="bg-gradient-to-b from-purple-50 to-white min-h-screen p-4 md:p-6 pt-6 md:pt-12">
       <div className="max-w-4xl mx-auto">
@@ -459,6 +463,13 @@ const VisitDetails = () => {
                 </div>
               )}
             </div>
+
+            {canAccessChat() && (
+  <ExpenseSharing 
+    visitId={currentVisit._id} 
+    participants={currentVisit.joinRequests?.filter(req => req.status === "accepted") || []}
+  />
+)}
 
             {/* Call to Action */}
             <div className="mt-8">

@@ -20,8 +20,7 @@ const ChatPage = () => {
     );
   }
 
-   // Debugging line to check the current chat object
-  console.log("User:", currentChat); // Debugging line to check the user object
+   
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50 p-6">
       <div className="max-w-4xl mx-auto">
