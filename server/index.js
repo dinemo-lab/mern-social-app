@@ -11,6 +11,7 @@ import visitRoutes from "./routes/vistRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js"; // Import chat routes
 import messageRoutes from "./routes/messageRoutes.js"; 
 import contactRoutes from "./routes/contactRoutes.js"
+import expenseRoutes from "./routes/expenseRoutes.js"; // Import expense routes
 
 dotenv.config();
 connectDB();
@@ -33,6 +34,7 @@ app.use("/api/visit", visitRoutes);
 app.use("/api/chats", chatRoutes); // Chat routes
 app.use("/api/messages", messageRoutes); 
 app.use("/api/contact",contactRoutes)// Message routes
+app.use("/chats", expenseRoutes); // Expense routes
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

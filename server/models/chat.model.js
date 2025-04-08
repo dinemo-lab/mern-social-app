@@ -1,26 +1,31 @@
-import mongoose from "mongoose";
+import { Schema, model } from 'mongoose';
 
-const chatSchema = new mongoose.Schema(
-  {
-    visitId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Visit", // Reference to the Visit model
-      required: true,
-    },
-    participants: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User", // Approved participants
-      },
-    ],
-    pendingParticipants: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User", // Users waiting for approval
-      },
-    ],
+const chatSchema = new Schema({
+  name: {
+    type: String,
+    trim: true
   },
-  { timestamps: true }
-);
+  participants: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  }],
+  isGroup: {
+    type: Boolean,
+    default: false
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  lastMessage: {
+    type: Schema.Types.ObjectId,
+    ref: 'Message'
+  }
+}, {
+  timestamps: true
+});
 
-export default mongoose.model("Chat", chatSchema);
+const Chat = model('Chat', chatSchema);
+
+export default Chat;
