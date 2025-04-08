@@ -89,7 +89,7 @@ const MyVisits = () => {
     <div className="container mx-auto px-4 py-6 bg-gradient-to-b from-purple-50 to-white min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-purple-800 border-b pb-2 border-purple-200">My Visit Requests</h1>
       
-      {/* Tabs */}
+     
       <div className="flex mb-8 bg-white rounded-lg shadow-sm p-1 max-w-md">
         <button
           className={`py-2 px-6 rounded-md transition-all ${
